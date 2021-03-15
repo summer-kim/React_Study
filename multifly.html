@@ -18,7 +18,7 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      class LikeButton extends React.Component {
+      class MultiplyGame extends React.Component {
         constructor(props) {
           super(props);
           this.state = {
@@ -31,28 +31,39 @@
 
         onSubmit = (e) => {
           e.preventDefault();
-          if (
-            parseInt(this.state.value) ===
-            this.state.firstNum * this.state.secondNum
-          ) {
-            this.setState({
-              firstNum: Math.ceil(Math.random() * 9),
-              secondNum: Math.ceil(Math.random() * 9),
-              value: '',
-              result: 'Correct!',
+          const value = parseInt(this.state.value);
+          if (value === this.state.firstNum * this.state.secondNum) {
+            this.setState((preState) => {
+              return {
+                firstNum: Math.ceil(Math.random() * 9),
+                secondNum: Math.ceil(Math.random() * 9),
+                value: '',
+                result: preState.value + ' Correct!',
+              };
             });
+            this.input.style.backgroundColor = 'rgb(216, 175, 216)';
           } else {
-            this.setState({
-              value: '',
-              result: 'Wrong!',
+            this.setState((preState) => {
+              return {
+                value: '',
+                result: preState.value + ' Wrong!',
+              };
             });
+            this.input.style.backgroundColor = 'rgb(236, 96, 96)';
           }
+          setTimeout(() => {
+            this.input.style.backgroundColor = '';
+          }, 350);
         };
 
         onChange = (e) => {
           this.setState({ value: e.target.value });
         };
 
+        input;
+        onRefInput = (element) => {
+          this.input = element;
+        };
         render() {
           return (
             <React.Fragment>
@@ -61,6 +72,7 @@
               </div>
               <form onSubmit={this.onSubmit}>
                 <input
+                  ref={this.onRefInput}
                   type='number'
                   value={this.state.value}
                   onChange={this.onChange}
@@ -74,7 +86,7 @@
       }
     </script>
     <script type="text/babel">
-      ReactDOM.render(<LikeButton />, document.querySelector('#root'));
+      ReactDOM.render(<MultiplyGame />, document.querySelector('#root'));
     </script>
   </body>
 </html>
