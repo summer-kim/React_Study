@@ -1,13 +1,12 @@
 const React = require('react');
+const { useState, useRef, Fragment } = React;
 
 const MultiplyGame = () => {
-  const [FirstNum, setFirstNum] = React.useState(Math.ceil(Math.random() * 9));
-  const [SecondNum, setSecondNum] = React.useState(
-    Math.ceil(Math.random() * 9)
-  );
-  const [Value, setValue] = React.useState('');
-  const [Result, setResult] = React.useState('');
-  const inputRef = React.useRef(null);
+  const [FirstNum, setFirstNum] = useState(Math.ceil(Math.random() * 9));
+  const [SecondNum, setSecondNum] = useState(Math.ceil(Math.random() * 9));
+  const [Value, setValue] = useState('');
+  const [Result, setResult] = useState('');
+  const inputRef = useRef(null);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +31,7 @@ const MultiplyGame = () => {
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <div>
         {FirstNum} X {SecondNum} ?
       </div>
@@ -41,7 +40,7 @@ const MultiplyGame = () => {
         <button type='submit'>Submit</button>
       </form>
       <div>{Result}</div>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
