@@ -1,6 +1,12 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const MultiplyGame = require('./MultiplyGame');
+//const MultiplyGame = require('./MultiplyGame');
+import GuessNumber from './GuessNumber';
 
-ReactDOM.render(<MultiplyGame />, document.querySelector('#root'));
+ReactDOM.render(
+  <React.StrictMode>
+    <GuessNumber />
+  </React.StrictMode>,
+  document.querySelector('#root')
+);
