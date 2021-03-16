@@ -18,72 +18,57 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      class MultiplyGame extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = {
-            firstNum: Math.ceil(Math.random() * 9),
-            secondNum: Math.ceil(Math.random() * 9),
-            value: '',
-            result: '',
-          };
-        }
+      const MultiplyGame = () => {
+        const [FirstNum, setFirstNum] = React.useState(
+          Math.ceil(Math.random() * 9)
+        );
+        const [SecondNum, setSecondNum] = React.useState(
+          Math.ceil(Math.random() * 9)
+        );
+        const [Value, setValue] = React.useState('');
+        const [Result, setResult] = React.useState('');
+        const inputRef = React.useRef(null);
 
-        onSubmit = (e) => {
+        const onSubmit = (e) => {
           e.preventDefault();
-          const value = parseInt(this.state.value);
-          if (value === this.state.firstNum * this.state.secondNum) {
-            this.setState((preState) => {
-              return {
-                firstNum: Math.ceil(Math.random() * 9),
-                secondNum: Math.ceil(Math.random() * 9),
-                value: '',
-                result: preState.value + ' Correct!',
-              };
-            });
-            this.input.style.backgroundColor = 'rgb(216, 175, 216)';
+          if (parseInt(Value) === FirstNum * SecondNum) {
+            setResult(Value + ' Correct!');
+            setFirstNum(Math.ceil(Math.random() * 9));
+            setSecondNum(Math.ceil(Math.random() * 9));
+            setValue('');
+            inputRef.current.style.backgroundColor = 'rgb(216, 175, 216)';
           } else {
-            this.setState((preState) => {
-              return {
-                value: '',
-                result: preState.value + ' Wrong!',
-              };
-            });
-            this.input.style.backgroundColor = 'rgb(236, 96, 96)';
+            setResult(Value + ' Wrong!');
+            setValue('');
+            inputRef.current.style.backgroundColor = 'rgb(236, 96, 96)';
           }
           setTimeout(() => {
-            this.input.style.backgroundColor = '';
+            inputRef.current.style.backgroundColor = '';
           }, 350);
         };
 
-        onChange = (e) => {
-          this.setState({ value: e.target.value });
+        const onChange = (e) => {
+          setValue(e.target.value);
         };
 
-        input;
-        onRefInput = (element) => {
-          this.input = element;
-        };
-        render() {
-          return (
-            <React.Fragment>
-              <div>
-                {this.state.firstNum} X {this.state.secondNum} ?
-              </div>
-              <form onSubmit={this.onSubmit}>
-                <input
-                  ref={this.onRefInput}
-                  type='number'
-                  value={this.state.value}
-                  onChange={this.onChange}
-                />
-                <button type='submit'>Submit</button>
-              </form>
-              <div>{this.state.result}</div>
-            </React.Fragment>
-          );
-        }
-      }
+        return (
+          <React.Fragment>
+            <div>
+              {FirstNum} X {SecondNum} ?
+            </div>
+            <form onSubmit={onSubmit}>
+              <input
+                ref={inputRef}
+                type='number'
+                value={Value}
+                onChange={onChange}
+              />
+              <button type='submit'>Submit</button>
+            </form>
+            <div>{Result}</div>
+          </React.Fragment>
+        );
+      };
     </script>
     <script type="text/babel">
       ReactDOM.render(<MultiplyGame />, document.querySelector('#root'));
