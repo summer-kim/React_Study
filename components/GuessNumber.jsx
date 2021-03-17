@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, memo } from 'react';
 import Trail from './Trail';
 
 function getNumbers() {
@@ -11,94 +11,76 @@ function getNumbers() {
   }
   return numPick;
 }
-export default class GuessNumber extends PureComponent {
-  state = {
-    value: getNumbers(),
-    answer: '',
-    result: '',
-    chance: 10,
-    trails: [],
-  };
+const GuessNumber = () => {
+  const [Value, setValue] = useState(getNumbers());
+  const [Answer, setAnswer] = useState('');
+  const [Result, setResult] = useState('');
+  const [Chance, setChance] = useState(10);
+  const [Trails, setTrails] = useState([]);
 
-  onSubmit = (e) => {
+  useEffect(() => {
+    if (Chance === 0) {
+      setResult('LOSE');
+      setTimeout(() => {
+        initializeState();
+      }, 3000);
+    }
+  }, [Chance]);
+
+  const onSubmit = (e) => {
     e.preventDefault();
     const answerArr = e.target.answer.value.split('');
     let strike = 0;
     let ball = 0;
-    const { value, chance, trails } = this.state;
 
     for (let i = 0; i <= 3; i++) {
       const num = Number(answerArr[i]);
-      if (num === value[i]) strike++;
-      else if (value.indexOf(num) > -1) ball++;
+      if (num === Value[i]) strike++;
+      else if (Value.indexOf(num) > -1) ball++;
     }
-    this.setState({
-      trails: [...trails, { answer: e.target.answer.value, strike, ball }],
-    });
+    setTrails([...Trails, { answer: e.target.answer.value, strike, ball }]);
 
     if (strike === 4) {
-      this.setState({ result: 'WIN' });
+      setResult('WIN');
       setTimeout(() => {
-        this.initializeState();
+        initializeState();
       }, 3000);
       return;
     }
 
-    this.setState(
-      (prevState) => ({
-        chance: prevState.chance - 1,
-      }),
-      () => {
-        if (chance === 0) {
-          this.setState({ result: 'LOSE' });
-          setTimeout(() => {
-            this.initializeState();
-          }, 3000);
-          return;
-        }
-      }
-    );
-    this.setState({ answer: '' });
+    setChance(Chance - 1);
+    setAnswer('');
   };
 
-  initializeState = () => {
-    this.setState({
-      value: getNumbers(),
-      answer: '',
-      result: '',
-      chance: 10,
-      trails: [],
-    });
+  const initializeState = () => {
+    setValue(getNumbers());
+    setResult('');
+    setChance(10);
+    setTrails([]);
   };
 
-  onChange = (e) => {
+  const onChange = (e) => {
     if (e.target.value.length > 4) {
       return;
     }
-    this.setState({ answer: e.target.value });
+    setAnswer(e.target.value);
   };
 
-  render() {
-    const { result, answer, trails } = this.state;
-    return (
-      <Fragment>
-        <div>Guess What? &#9755; _ _ _ _ (except Zero)</div>
-        <form onSubmit={this.onSubmit}>
-          <input
-            type='number'
-            id='answer'
-            value={answer}
-            onChange={this.onChange}
-          />
-          <button type='submit'>Submit</button>
-        </form>
-        <h1>{result}</h1>
-        <ul>
-          {trails.map((trail, i) => (
-            <Trail trail={trail} key={trail.answer + i} />
-          ))}
-        </ul>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <div>Guess What? &#9755; _ _ _ _ (except Zero)</div>
+      <form onSubmit={onSubmit}>
+        <input type='number' id='answer' value={Answer} onChange={onChange} />
+        <button type='submit'>Submit</button>
+      </form>
+      <h1>{Result}</h1>
+      <ul>
+        {Trails.map((trail, i) => (
+          <Trail trail={trail} key={trail.answer + i} />
+        ))}
+      </ul>
+    </Fragment>
+  );
+};
+
+export default memo(GuessNumber);
