@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//const MultiplyGame = require('./MultiplyGame');
-import GuessNumber from './GuessNumber';
+//const MultiplyGame = require('./components/MultiplyGame');
+import GuessNumber from './components/GuessNumber';
 
 ReactDOM.render(
   <React.StrictMode>
