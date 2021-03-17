@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
+import Trail from './Trail';
 
 function getNumbers() {
   let numList = new Array(9).fill(0);
@@ -10,7 +11,7 @@ function getNumbers() {
   }
   return numPick;
 }
-export default class GuessNumber extends Component {
+export default class GuessNumber extends PureComponent {
   state = {
     value: getNumbers(),
     answer: '',
@@ -18,6 +19,7 @@ export default class GuessNumber extends Component {
     chance: 10,
     trails: [],
   };
+
   onSubmit = (e) => {
     e.preventDefault();
     const answerArr = e.target.answer.value.split('');
@@ -93,10 +95,8 @@ export default class GuessNumber extends Component {
         </form>
         <h1>{this.state.result}</h1>
         <ul>
-          {this.state.trails.map((trail) => (
-            <li>
-              {trail.answer} &#9733; strike:{trail.strike} ball:{trail.ball}
-            </li>
+          {this.state.trails.map((trail, i) => (
+            <Trail trail={trail} key={trail.answer + i} />
           ))}
         </ul>
       </Fragment>
