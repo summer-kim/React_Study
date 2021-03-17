@@ -25,17 +25,15 @@ export default class GuessNumber extends PureComponent {
     const answerArr = e.target.answer.value.split('');
     let strike = 0;
     let ball = 0;
+    const { value, chance, trails } = this.state;
 
     for (let i = 0; i <= 3; i++) {
       const num = Number(answerArr[i]);
-      if (num === this.state.value[i]) strike++;
-      else if (this.state.value.indexOf(num) > -1) ball++;
+      if (num === value[i]) strike++;
+      else if (value.indexOf(num) > -1) ball++;
     }
     this.setState({
-      trails: [
-        ...this.state.trails,
-        { answer: e.target.answer.value, strike, ball },
-      ],
+      trails: [...trails, { answer: e.target.answer.value, strike, ball }],
     });
 
     if (strike === 4) {
@@ -51,7 +49,7 @@ export default class GuessNumber extends PureComponent {
         chance: prevState.chance - 1,
       }),
       () => {
-        if (this.state.chance === 0) {
+        if (chance === 0) {
           this.setState({ result: 'LOSE' });
           setTimeout(() => {
             this.initializeState();
@@ -81,6 +79,7 @@ export default class GuessNumber extends PureComponent {
   };
 
   render() {
+    const { result, answer, trails } = this.state;
     return (
       <Fragment>
         <div>Guess What? &#9755; _ _ _ _ (except Zero)</div>
@@ -88,14 +87,14 @@ export default class GuessNumber extends PureComponent {
           <input
             type='number'
             id='answer'
-            value={this.state.answer}
+            value={answer}
             onChange={this.onChange}
           />
           <button type='submit'>Submit</button>
         </form>
-        <h1>{this.state.result}</h1>
+        <h1>{result}</h1>
         <ul>
-          {this.state.trails.map((trail, i) => (
+          {trails.map((trail, i) => (
             <Trail trail={trail} key={trail.answer + i} />
           ))}
         </ul>
