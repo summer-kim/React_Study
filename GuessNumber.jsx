@@ -16,22 +16,61 @@ export default class GuessNumber extends Component {
     answer: '',
     result: '',
     chance: 10,
+    trails: [],
   };
   onSubmit = (e) => {
     e.preventDefault();
     const answerArr = e.target.answer.value.split('');
     let strike = 0;
     let ball = 0;
+
     for (let i = 0; i <= 3; i++) {
       const num = Number(answerArr[i]);
       if (num === this.state.value[i]) strike++;
       else if (this.state.value.indexOf(num) > -1) ball++;
     }
-    this.setState((prevState) => ({
-      chance: prevState.chance - 1,
-    }));
-    //console.log(this.state.value, answerArr);
+    this.setState({
+      trails: [
+        ...this.state.trails,
+        { answer: e.target.answer.value, strike, ball },
+      ],
+    });
+
+    if (strike === 4) {
+      this.setState({ result: 'WIN' });
+      setTimeout(() => {
+        this.initializeState();
+      }, 3000);
+      return;
+    }
+
+    this.setState(
+      (prevState) => ({
+        chance: prevState.chance - 1,
+      }),
+      () => {
+        if (this.state.chance === 0) {
+          this.setState({ result: 'LOSE' });
+          setTimeout(() => {
+            this.initializeState();
+          }, 3000);
+          return;
+        }
+      }
+    );
+    this.setState({ answer: '' });
   };
+
+  initializeState = () => {
+    this.setState({
+      value: getNumbers(),
+      answer: '',
+      result: '',
+      chance: 10,
+      trails: [],
+    });
+  };
+
   onChange = (e) => {
     if (e.target.value.length > 4) {
       return;
@@ -52,7 +91,14 @@ export default class GuessNumber extends Component {
           />
           <button type='submit'>Submit</button>
         </form>
-        <div>{this.state.result}</div>
+        <h1>{this.state.result}</h1>
+        <ul>
+          {this.state.trails.map((trail) => (
+            <li>
+              {trail.answer} &#9733; strike:{trail.strike} ball:{trail.ball}
+            </li>
+          ))}
+        </ul>
       </Fragment>
     );
   }
