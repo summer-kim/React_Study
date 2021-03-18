@@ -19,6 +19,13 @@ const Display = () => {
         >
           Bulls and Cows
         </Link>
+        <Link
+          className='col p-2 m-1 btn bg-gradient text-white'
+          to='/speedMeasure'
+          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
+        >
+          Speed Measure Game
+        </Link>
       </div>
     </div>
   );
