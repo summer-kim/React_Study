@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-//const MultiplyGame = require('./components/MultiplyGame');
-import GuessNumber from './components/GuessNumber';
+import Games from './Games.jsx';
 
 ReactDOM.render(
   <React.StrictMode>
-    <GuessNumber />
+    <Games />
   </React.StrictMode>,
   document.querySelector('#root')
 );
