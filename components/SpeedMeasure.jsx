@@ -1,55 +1,47 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, useState, useRef } from 'react';
 
-class SpeedMeasure extends Component {
-  state = {
-    status: 'wait',
-    message: 'Click to Start',
-    result: '',
-    records: [],
-  };
-  setTimer;
-  startTime;
-  endTime;
+const SpeedMeasure = () => {
+  const [status, setStatus] = useState('wait');
+  const [message, setMessage] = useState('Click to Start');
+  const [records, setRecords] = useState([]);
+  const [result, setResult] = useState('');
+  const setTimer = useRef(null);
+  const startTime = useRef(null);
+  const endTime = useRef(null);
 
-  onClick = () => {
-    const { status, records } = this.state;
+  const onClick = () => {
     switch (status) {
       case 'wait':
-        this.setState({
-          status: 'ready',
-          message: 'Click Box when color turns to Blue',
-          result: '',
-        });
-        this.setTimer = setTimeout(() => {
-          this.startTime = Date.now();
-          this.setState({ status: 'now', message: 'Click Now' });
+        setStatus('ready');
+        setMessage('Click Box when color turns to Blue');
+        setResult('');
+        setTimer.current = setTimeout(() => {
+          startTime.current = Date.now();
+          setStatus('now');
+          setMessage('Click Now');
         }, Math.random() * 3000 + 1000);
         break;
       case 'ready':
-        clearTimeout(this.setTimer);
-        this.setState({
-          status: 'wait',
-          message: 'Too Early, Click to start again',
-          result: 'FAIL',
-        });
+        clearTimeout(setTimer.current);
+        setStatus('wait');
+        setMessage('Too Early, Click to start again');
+        setResult('FAIL');
         break;
       case 'now':
-        this.endTime = Date.now();
-        const time = this.endTime - this.startTime;
-        this.setState({
-          status: 'wait',
-          message: 'Good Job Click to start agiain',
-          result: 'SUCCESS',
-          records: [...records, time],
-        });
-
+        endTime.current = Date.now();
+        setStatus('wait');
+        setMessage('Good Job Click to start agiain');
+        setResult('SUCCESS');
+        setRecords((preRecords) => [
+          ...preRecords,
+          endTime.current - startTime.current,
+        ]);
         break;
       default:
         break;
     }
   };
-  showAverage = () => {
-    const { records } = this.state;
+  const showAverage = () => {
     let sum, average;
     if (records) {
       sum = records.reduce((acc, curr) => acc + curr, 0);
@@ -57,27 +49,26 @@ class SpeedMeasure extends Component {
     }
     return average > 0 ? average / 1000 : 0;
   };
-  render() {
-    const { result, message, status } = this.state;
-    const statusColor =
-      status === 'ready'
-        ? 'bg-danger'
-        : status === 'wait'
-        ? 'bg-success'
-        : 'bg-primary';
-    return (
-      <Fragment>
-        <div
-          onClick={this.onClick}
-          className={` w-50 h-50 d-flex flex-column align-items-center justify-content-center text-white h2 mx-auto ${statusColor}`}
-        >
-          <h3>{result}</h3>
-          <div>{message}</div>
-        </div>
-        <div>Average : {this.showAverage()}s</div>
-      </Fragment>
-    );
-  }
-}
+
+  const statusColor =
+    status === 'ready'
+      ? 'bg-danger'
+      : status === 'wait'
+      ? 'bg-success'
+      : 'bg-primary';
+
+  return (
+    <Fragment>
+      <div
+        onClick={onClick}
+        className={` w-50 h-50 d-flex flex-column align-items-center justify-content-center text-white h2 mx-auto ${statusColor}`}
+      >
+        <h3>{result}</h3>
+        <div>{message}</div>
+      </div>
+      <div>Average : {showAverage()}s</div>
+    </Fragment>
+  );
+};
 
 export default SpeedMeasure;
