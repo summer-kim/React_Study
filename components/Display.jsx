@@ -26,6 +26,13 @@ const Display = () => {
         >
           Speed Measure Game
         </Link>
+        <Link
+          className='col p-2 m-1 btn bg-gradient text-white'
+          to='/rsp'
+          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
+        >
+          Rock Scissor Paper
+        </Link>
       </div>
     </div>
   );
