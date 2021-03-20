@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 const colorChart = (num) => {
   let background = '';
@@ -11,7 +11,7 @@ const colorChart = (num) => {
   }
   return background;
 };
-class Ball extends Component {
+class Ball extends PureComponent {
   render() {
     const { num } = this.props;
     const background = colorChart(num);
