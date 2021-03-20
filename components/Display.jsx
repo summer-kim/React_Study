@@ -1,45 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const linkObject = [
+  {
+    link: '/multiply',
+    gameName: 'Multiply',
+  },
+  {
+    link: '/guessNumber',
+    gameName: 'Bulls and Cows',
+  },
+  {
+    link: '/speedMeasure',
+    gameName: 'Speed Measure Game',
+  },
+  {
+    link: '/rsp',
+    gameName: 'Rock Scissor Paper',
+  },
+  {
+    link: '/lotto',
+    gameName: 'Lotto Balls',
+  },
+];
 const Display = () => {
   return (
     <div className='container m-3 '>
       <div className='row '>
-        <Link
-          className='col p-2 m-1 btn bg-gradient text-white'
-          to='/multiply'
-          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
-        >
-          Multiply
-        </Link>
-        <Link
-          className='col p-2 m-1 btn bg-gradient text-white'
-          to='/guessNumber'
-          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
-        >
-          Bulls and Cows
-        </Link>
-        <Link
-          className='col p-2 m-1 btn bg-gradient text-white'
-          to='/speedMeasure'
-          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
-        >
-          Speed Measure Game
-        </Link>
-        <Link
-          className='col p-2 m-1 btn bg-gradient text-white'
-          to='/rsp'
-          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
-        >
-          Rock Scissor Paper
-        </Link>
-        <Link
-          className='col p-2 m-1 btn bg-gradient text-white'
-          to='/lotto'
-          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
-        >
-          Lotto Balls
-        </Link>
+        {linkObject.map((link, i) => (
+          <Link
+            key={link.link + i}
+            className='col p-2 m-1 btn bg-gradient text-white'
+            to={link.link}
+            style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
+          >
+            {link.gameName}
+          </Link>
+        ))}
       </div>
     </div>
   );
