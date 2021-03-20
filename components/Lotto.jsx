@@ -1,17 +1,12 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Ball from './subParts/Ball';
 
 const getLottoNumbers = () => {
+  const shuffle = [];
   const candidate = Array(45)
     .fill()
     .map((v, i) => i + 1);
-  const shuffle = [];
+
   while (shuffle.length < 6) {
     const num = candidate.splice(
       Math.floor(Math.random() * candidate.length),
@@ -23,18 +18,18 @@ const getLottoNumbers = () => {
 };
 
 const Lotto = () => {
-  const [numbers, setNumbers] = useState(getLottoNumbers());
+  const timeoutArray = useRef([]);
+  const pickNumbers = useMemo(() => getLottoNumbers(), [timeoutArray.current]);
+  const [numbers, setNumbers] = useState(pickNumbers);
   const [balls, setBalls] = useState([]);
   const [startable, setStartable] = useState(true);
   const [resetable, setResetable] = useState(false);
   const [run, setRun] = useState(false);
   const [reset, setReset] = useState(false);
-  const timeoutArray = useRef([1, 2]);
 
   useEffect(() => {
     if (run) {
       for (let i = 0; i < numbers.length; i++) {
-        console.log(timeoutArray.current[i]);
         timeoutArray.current[i] = setTimeout(() => {
           setBalls((preBalls) => [...preBalls, numbers[i]]);
           if (i === numbers.length - 1) setResetable(true);
@@ -43,7 +38,9 @@ const Lotto = () => {
     }
     return () => {
       if (run) {
-        clearTimeFunction();
+        timeoutArray.current.forEach((timeout) => {
+          clearTimeout(timeout);
+        });
         setRun(false);
       }
     };
@@ -66,20 +63,13 @@ const Lotto = () => {
   };
 
   const onReset = () => {
-    clearTimeFunction();
-    setNumbers(getLottoNumbers());
+    timeoutArray.current = [];
     setBalls([]);
+    setRun(false);
     setStartable(true);
     setResetable(false);
-    setRun(false);
     setReset(false);
-  };
-
-  const clearTimeFunction = () => {
-    timeoutArray.current.length > 0 &&
-      timeoutArray.current.forEach((timeout) => {
-        clearTimeout(timeout);
-      });
+    setNumbers(pickNumbers);
   };
 
   return (
