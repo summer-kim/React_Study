@@ -22,6 +22,8 @@ class Lotto extends Component {
     ballSelected: [],
     startable: true,
     resetable: false,
+    run: false,
+    reset: false,
   };
   timeoutArray = [];
 
@@ -33,25 +35,54 @@ class Lotto extends Component {
           ballSelected: [...prevState.ballSelected, numberSelected[i]],
         }));
         if (i === numberSelected.length - 1) {
-          this.setState({ resetable: true, startable: false });
+          this.setState({ resetable: true });
         }
       }, (i + 1) * 1000);
     }
   };
 
+  componentDidUpdate() {
+    const { run, reset } = this.state;
+    if (run) {
+      this.onStart();
+      this.setState({ run: false });
+    } else if (reset) {
+      this.onReset();
+      this.setState({ reset: false });
+    }
+  }
+
   onClick = () => (e) => {
     if (e.target.id === 'start') {
-      this.onStart();
+      this.setState({ run: true, startable: false });
     } else {
-      this.setState({ reset: true });
+      this.setState({ reset: true, resetable: false });
     }
   };
 
   componentWillUnmount() {
-    this.timeoutArray.forEach((timeout) => {
-      clearTimeout(timeout);
-    });
+    this.clearTimeFunction();
   }
+
+  onReset = () => {
+    this.clearTimeFunction();
+    this.setState({
+      numberSelected: getLottoNumbers(),
+      ballSelected: [],
+      startable: true,
+      resetable: false,
+      run: false,
+    });
+    this.setState({ startable: true });
+  };
+
+  clearTimeFunction = () => {
+    const { timeoutArray } = this;
+    timeoutArray.length > 0 &&
+      timeoutArray.forEach((timeout) => {
+        clearTimeout(timeout);
+      });
+  };
 
   render() {
     const { ballSelected, startable, resetable } = this.state;
