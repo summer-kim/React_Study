@@ -5,6 +5,7 @@ import MultiplyGame from './components/MultiplyGame';
 import GuessNumber from './components/GuessNumber';
 import SpeedMeasure from './components/SpeedMeasure';
 import RockScissorPaper from './components/RockScissorPaper';
+import Lotto from './components/Lotto';
 
 import Display from './components/Display';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,6 +23,7 @@ const Games = () => {
           <Route path='/guessNumber' component={GuessNumber} />
           <Route path='/speedMeasure' component={SpeedMeasure} />
           <Route path='/rsp' component={RockScissorPaper} />
+          <Route path='/lotto' component={Lotto} />
         </div>
       </div>
     </BrowserRouter>

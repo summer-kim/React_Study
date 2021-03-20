@@ -33,6 +33,13 @@ const Display = () => {
         >
           Rock Scissor Paper
         </Link>
+        <Link
+          className='col p-2 m-1 btn bg-gradient text-white'
+          to='/lotto'
+          style={{ backgroundColor: 'rgb(82 ,172 ,170)' }}
+        >
+          Lotto Balls
+        </Link>
       </div>
     </div>
   );
