@@ -19,12 +19,42 @@ function getLottoNumbers() {
 class Lotto extends Component {
   state = {
     numberSelected: getLottoNumbers(),
-    ballSelected: [1, 11, 21, 31, 41],
-    reset: false,
-    start: false,
+    ballSelected: [],
+    startable: true,
+    resetable: false,
   };
+  timeoutArray = [];
+
+  onStart = () => {
+    const { numberSelected } = this.state;
+    for (let i = 0; i < numberSelected.length; i++) {
+      this.timeoutArray[i] = setTimeout(() => {
+        this.setState((prevState) => ({
+          ballSelected: [...prevState.ballSelected, numberSelected[i]],
+        }));
+        if (i === numberSelected.length - 1) {
+          this.setState({ resetable: true, startable: false });
+        }
+      }, (i + 1) * 1000);
+    }
+  };
+
+  onClick = () => (e) => {
+    if (e.target.id === 'start') {
+      this.onStart();
+    } else {
+      this.setState({ reset: true });
+    }
+  };
+
+  componentWillUnmount() {
+    this.timeoutArray.forEach((timeout) => {
+      clearTimeout(timeout);
+    });
+  }
+
   render() {
-    const { ballSelected, reset } = this.state;
+    const { ballSelected, startable, resetable } = this.state;
     return (
       <div className='container text-center h-100'>
         <h3 className='m-2 text-center text-uppercase text-secondary'>
@@ -36,8 +66,22 @@ class Lotto extends Component {
           ))}
         </div>
         <div>
-          <button className='btn btn-outline-secondary m-1 '>Start</button>
-          <button className='btn btn-outline-secondary m-1 '>Reset</button>
+          <button
+            className='btn btn-outline-secondary m-1'
+            id='start'
+            disabled={!startable}
+            onClick={this.onClick()}
+          >
+            Start
+          </button>
+          <button
+            className='btn btn-outline-secondary m-1'
+            id='reset'
+            disabled={!resetable}
+            onClick={this.onClick()}
+          >
+            Reset
+          </button>
         </div>
       </div>
     );
