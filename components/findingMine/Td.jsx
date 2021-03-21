@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useRef } from 'react';
+import React, { useContext, useCallback } from 'react';
 import {
   TableContext,
   TABLE_CODE,
@@ -15,11 +15,11 @@ const getTdText = (code) => {
       return 'X';
     case TABLE_CODE.NORMAL:
       return ' ';
-    case TABLE_CODE.QUESTION:
     case TABLE_CODE.QUESTION_MINE:
+    case TABLE_CODE.QUESTION:
       return '?';
-    case TABLE_CODE.FLAG:
     case TABLE_CODE.FLAG_MINE:
+    case TABLE_CODE.FLAG:
       return '!';
     default:
       break;
@@ -43,10 +43,13 @@ const getTdStyle = (code) => {
 
 const Td = ({ rowIndex, colIndex }) => {
   const { tableData, dispatch } = useContext(TableContext);
-  const code = useRef(tableData[rowIndex][colIndex]);
-
+  // const code = useMemo(() => {
+  //   return tableData[rowIndex][colIndex]}, [
+  //   tableData[rowIndex][colIndex],
+  // ]);
+  console.log('td');
   const onClickDigging = useCallback(() => {
-    switch (code) {
+    switch (tableData[rowIndex][colIndex]) {
       case TABLE_CODE.MINE:
       case TABLE_CODE.NORMAL:
         dispatch({ type: OPEN_CELL, row: rowIndex, col: colIndex });
@@ -59,7 +62,7 @@ const Td = ({ rowIndex, colIndex }) => {
 
   const onClickRight = useCallback((e) => {
     e.preventDefault();
-    switch (code) {
+    switch (tableData[rowIndex][colIndex]) {
       case TABLE_CODE.MINE:
       case TABLE_CODE.NORMAL:
         dispatch({ type: TO_QUESTION, row: rowIndex, col: colIndex });
@@ -81,10 +84,10 @@ const Td = ({ rowIndex, colIndex }) => {
   return (
     <td
       onClick={onClickDigging}
-      style={getTdStyle(code)}
+      style={getTdStyle(tableData[rowIndex][colIndex])}
       onContextMenu={onClickRight}
     >
-      {getTdText(code)}
+      {getTdText(tableData[rowIndex][colIndex])}
     </td>
   );
 };
