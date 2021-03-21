@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import Ball from './subParts/Ball';
+import Ball from './Ball';
 
 const getLottoNumbers = () => {
   const shuffle = [];

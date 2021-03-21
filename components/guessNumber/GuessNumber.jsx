@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, memo } from 'react';
-import Trail from './subParts/Trail';
+import Trail from './Trail';
 
 function getNumbers() {
   let numList = new Array(9).fill(0);
