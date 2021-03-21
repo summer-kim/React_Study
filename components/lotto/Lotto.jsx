@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import Ball from './Ball';
 
 const getLottoNumbers = () => {
@@ -52,25 +58,31 @@ const Lotto = () => {
     }
   }, [reset]);
 
-  const onClick = () => (e) => {
-    if (e.target.id === 'start') {
-      setRun(true);
-      setStartable(false);
-    } else {
-      setReset(true);
-      setResetable(false);
-    }
-  };
+  useEffect(() => {
+    setNumbers(pickNumbers);
+  }, [pickNumbers]);
 
-  const onReset = () => {
+  const onClick = useCallback(
+    () => (e) => {
+      if (e.target.id === 'start') {
+        setRun(true);
+        setStartable(false);
+      } else {
+        setReset(true);
+        setResetable(false);
+      }
+    },
+    []
+  );
+
+  const onReset = useCallback(() => {
     timeoutArray.current = [];
     setBalls([]);
     setRun(false);
     setStartable(true);
     setResetable(false);
     setReset(false);
-    setNumbers(pickNumbers);
-  };
+  }, []);
 
   return (
     <div className='container text-center h-100'>
