@@ -22,6 +22,10 @@ const linkObject = [
     link: '/lotto',
     gameName: 'Lotto Balls',
   },
+  {
+    link: '/mine',
+    gameName: 'Finding Mines',
+  },
 ];
 const Display = () => {
   return (

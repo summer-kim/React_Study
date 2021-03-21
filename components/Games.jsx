@@ -6,6 +6,7 @@ import GuessNumber from './guessNumber/GuessNumber';
 import SpeedMeasure from './speedMesure/SpeedMeasure';
 import RockScissorPaper from './rockScissorsPaper/RockScissorPaper';
 import Lotto from './lotto/Lotto';
+import MineSearch from './findingMine/MineSearch';
 
 import Display from './Display';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,6 +25,7 @@ const Games = () => {
           <Route path='/speedMeasure' component={SpeedMeasure} />
           <Route path='/rsp' component={RockScissorPaper} />
           <Route path='/lotto' component={Lotto} />
+          <Route path='/mine' component={MineSearch} />
         </div>
       </div>
     </BrowserRouter>
