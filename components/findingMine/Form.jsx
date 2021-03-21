@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
+import { TableContext, START_GAME } from './MineSearch';
 
 const Form = () => {
   const [rows, setRows] = useState(10);
   const [cols, setCols] = useState(10);
   const [mines, setMines] = useState(20);
+  const { dispatch } = useContext(TableContext);
 
   const onChangeRows = useCallback((e) => {
     setRows(e.target.value);
@@ -17,7 +19,9 @@ const Form = () => {
     setMines(e.target.value);
   }, []);
 
-  const onClick = useCallback(() => {}, []);
+  const onClick = useCallback(() => {
+    dispatch({ type: START_GAME, rows, cols, mines });
+  }, [rows, cols, mines]);
 
   return (
     <div>
