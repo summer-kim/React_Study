@@ -1,5 +1,12 @@
-import React, { useContext, useCallback } from 'react';
-import { TableContext, TABLE_CODE, OPEN_CELL } from './MineSearch';
+import React, { useContext, useCallback, useRef } from 'react';
+import {
+  TableContext,
+  TABLE_CODE,
+  OPEN_CELL,
+  TO_FLAG,
+  TO_NORMAL,
+  TO_QUESTION,
+} from './MineSearch';
 import '../../asset/findingMine.css';
 
 const getTdText = (code) => {
@@ -36,7 +43,7 @@ const getTdStyle = (code) => {
 
 const Td = ({ rowIndex, colIndex }) => {
   const { tableData, dispatch } = useContext(TableContext);
-  const code = tableData[rowIndex][colIndex];
+  const code = useRef(tableData[rowIndex][colIndex]);
 
   const onClickDigging = useCallback(() => {
     switch (code) {
@@ -49,8 +56,34 @@ const Td = ({ rowIndex, colIndex }) => {
         break;
     }
   }, []);
+
+  const onClickRight = useCallback((e) => {
+    e.preventDefault();
+    switch (code) {
+      case TABLE_CODE.MINE:
+      case TABLE_CODE.NORMAL:
+        dispatch({ type: TO_QUESTION, row: rowIndex, col: colIndex });
+        break;
+      case TABLE_CODE.QUESTION_MINE:
+      case TABLE_CODE.QUESTION:
+        dispatch({ type: TO_FLAG, row: rowIndex, col: colIndex });
+        break;
+      case TABLE_CODE.FLAG_MINE:
+      case TABLE_CODE.FLAG:
+        dispatch({ type: TO_NORMAL, row: rowIndex, col: colIndex });
+        break;
+      case TABLE_CODE.OPEND:
+      default:
+        break;
+    }
+  }, []);
+
   return (
-    <td onClick={onClickDigging} style={getTdStyle(code)}>
+    <td
+      onClick={onClickDigging}
+      style={getTdStyle(code)}
+      onContextMenu={onClickRight}
+    >
       {getTdText(code)}
     </td>
   );

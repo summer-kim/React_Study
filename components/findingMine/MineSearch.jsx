@@ -6,8 +6,13 @@ export const TableContext = createContext({
   tableData: [],
   dispatch: () => {},
 });
+
 export const START_GAME = 'START_GAME';
 export const OPEN_CELL = 'OPEN_CELL';
+export const TO_FLAG = 'TO_FLAG';
+export const TO_NORMAL = 'TO_NORMAL';
+export const TO_QUESTION = 'TO_QUESTION';
+
 export const TABLE_CODE = {
   MINE: -7,
   NORMAL: -1,
