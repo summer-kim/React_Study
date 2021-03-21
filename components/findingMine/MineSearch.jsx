@@ -1,6 +1,23 @@
-import React, { useReducer, createContext } from 'react';
+import React, { useReducer, createContext, useMemo } from 'react';
 import Form from './Form';
 import Table from './Table';
+
+export const TableContext = createContext({
+  tableData: [],
+  dispatch: () => {},
+});
+export const START_GAME = 'START_GAME';
+export const OPEN_CELL = 'OPEN_CELL';
+export const TABLE_CODE = {
+  MINE: -7,
+  NORMAL: -1,
+  QUESTION: -2,
+  FLAG: -3,
+  QUESTION_MINE: -4,
+  FLAG_MINE: -5,
+  EXPLOSION: -6,
+  OPEND: 0,
+};
 
 const initialState = {
   tableData: [],
@@ -8,21 +25,69 @@ const initialState = {
   result: '',
 };
 
-const reducer = ({ state, action }) => {
+const reducer = (state, action) => {
   switch (action.type) {
+    case START_GAME:
+      return {
+        ...state,
+        tableData: plantMine({
+          rows: action.rows,
+          cols: action.cols,
+          mines: action.mines,
+        }),
+      };
+    case OPEN_CELL:
+      const tableData = [...state.tableData];
+      tableData[action.row][action.col] = TABLE_CODE.OPEND;
+      return {
+        ...state,
+        tableData,
+      };
     default:
       break;
   }
 };
 
+const plantMine = ({ rows, cols, mines }) => {
+  const data = [];
+  const shuffle = [];
+  const candidate = Array(rows * cols)
+    .fill()
+    .map((v, idx) => idx);
+  while (shuffle.length < mines) {
+    const randomNum = Math.floor(Math.random() * candidate.length);
+    const mineLocation = candidate.splice(randomNum, 1)[0];
+    shuffle.push(mineLocation);
+  }
+  for (let i = 0; i < rows; i++) {
+    const rowArray = [];
+    for (let j = 0; j < cols; j++) {
+      rowArray.push(TABLE_CODE.NORMAL);
+    }
+    data.push(rowArray);
+  }
+
+  shuffle.forEach((location) => {
+    const row = Math.floor(location / cols);
+    const col = location % cols;
+    data[row][col] = TABLE_CODE.MINE;
+  });
+  return data;
+};
+
 const MineSearch = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const contextValue = useMemo(
+    () => ({ tableData: state.tableData, dispatch }),
+    [state.tableData]
+  );
   return (
-    <div>
+    <TableContext.Provider value={contextValue}>
       <Form />
-      <div></div>
+      <div>{state.timePassed}</div>
       <Table />
-    </div>
+      <div>{state.result}</div>
+    </TableContext.Provider>
   );
 };
 
