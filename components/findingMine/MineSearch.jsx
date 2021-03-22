@@ -30,7 +30,8 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  const tableData = [...state.tableData];
+  const { row = '', col = '' } = action;
+  let rowArray = [];
   switch (action.type) {
     case START_GAME:
       return {
@@ -42,20 +43,45 @@ const reducer = (state, action) => {
         }),
       };
     case OPEN_CELL:
-      tableData[action.row][action.col] = TABLE_CODE.OPEND;
+      const tableData = [...state.tableData];
+      tableData[row][col] = TABLE_CODE.OPEND;
       return {
         ...state,
         tableData,
       };
     case TO_QUESTION:
-      tableData[action.row][action.col] = TABLE_CODE.QUESTION;
-      return { ...state, tableData };
+      rowArray = [...state.tableData[row]];
+      rowArray[col] === TABLE_CODE.MINE
+        ? (rowArray[col] = TABLE_CODE.QUESTION_MINE)
+        : (rowArray[col] = TABLE_CODE.QUESTION);
+      return {
+        ...state,
+        tableData: state.tableData.map((original, i) =>
+          i === row ? rowArray : original
+        ),
+      };
     case TO_FLAG:
-      tableData[action.row][action.col] = TABLE_CODE.FLAG;
-      return { ...state, tableData };
+      rowArray = [...state.tableData[row]];
+      rowArray[col] === TABLE_CODE.QUESTION_MINE
+        ? (rowArray[col] = TABLE_CODE.FLAG_MINE)
+        : (rowArray[col] = TABLE_CODE.FLAG);
+      return {
+        ...state,
+        tableData: state.tableData.map((original, i) =>
+          i === row ? rowArray : original
+        ),
+      };
     case TO_NORMAL:
-      tableData[action.row][action.col] = TABLE_CODE.NORMAL;
-      return { ...state, tableData };
+      rowArray = [...state.tableData[row]];
+      rowArray[col] === TABLE_CODE.FLAG_MINE
+        ? (rowArray[col] = TABLE_CODE.MINE)
+        : (rowArray[col] = TABLE_CODE.NORMAL);
+      return {
+        ...state,
+        tableData: state.tableData.map((original, i) =>
+          i === row ? rowArray : original
+        ),
+      };
     default:
       break;
   }
