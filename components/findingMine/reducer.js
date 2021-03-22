@@ -70,9 +70,14 @@ const reducer = (state, action) => {
       };
     }
     case ACTION_TYPE.BLOW_UP:
+      rowArray = [...state.tableData[row]];
+      rowArray[col] = TABLE_CODE.EXPLOSION;
       return {
         ...state,
         halted: true,
+        tableData: state.tableData.map((original, i) =>
+          i === row ? rowArray : original
+        ),
       };
     case ACTION_TYPE.TO_QUESTION:
       rowArray = [...state.tableData[row]];

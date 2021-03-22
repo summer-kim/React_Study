@@ -6,6 +6,7 @@ const getTdText = (code) => {
   switch (code) {
     case TABLE_CODE.MINE:
       return 'X';
+    case TABLE_CODE.EXPLOSION:
     case TABLE_CODE.NORMAL:
       return ' ';
     case TABLE_CODE.QUESTION_MINE:
@@ -32,6 +33,8 @@ const getTdStyle = (code) => {
     case TABLE_CODE.FLAG_MINE:
     case TABLE_CODE.FLAG:
       return { background: 'rgb(255, 107, 156)' };
+    case TABLE_CODE.EXPLOSION:
+      return { background: 'red' };
     default:
       return { background: 'teal' };
   }
@@ -44,12 +47,15 @@ const Td = ({ rowIndex, colIndex, code, dispatch, halted }) => {
     }
     switch (code) {
       case TABLE_CODE.MINE:
+      case TABLE_CODE.QUESTION_MINE:
+      case TABLE_CODE.FLAG_MINE:
         dispatch({ type: ACTION_TYPE.BLOW_UP, row: rowIndex, col: colIndex });
         break;
       case TABLE_CODE.NORMAL:
+      case TABLE_CODE.QUESTION:
+      case TABLE_CODE.FLAG:
         dispatch({ type: ACTION_TYPE.OPEN_CELL, row: rowIndex, col: colIndex });
         break;
-      case TABLE_CODE.OPEND:
       default:
         break;
     }
