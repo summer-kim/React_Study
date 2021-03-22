@@ -14,35 +14,61 @@ const reducer = (state, action) => {
           mines: action.mines,
         }),
       };
-    case ACTION_TYPE.OPEN_CELL:
+    case ACTION_TYPE.OPEN_CELL: {
       const tableData = [...state.tableData];
-      let aroundArea = [tableData[row][col - 1], tableData[row][col + 1]];
-      if (tableData[row - 1]) {
-        aroundArea = aroundArea.concat(
-          tableData[row - 1][col - 1],
-          tableData[row - 1][col],
-          tableData[row - 1][col + 1]
+      const mineList = [
+        TABLE_CODE.MINE,
+        TABLE_CODE.QUESTION_MINE,
+        TABLE_CODE.FLAG_MINE,
+      ];
+      const recursiveLog = [];
+
+      const checkMines = (rowCurr, colCurr) => {
+        if (mineList.includes(tableData[rowCurr][colCurr])) {
+          return;
+        }
+        if (tableData[rowCurr][colCurr] === TABLE_CODE.OPEND) {
+          return;
+        }
+        if (recursiveLog.includes(rowCurr + ' ' + colCurr)) {
+          return;
+        } else {
+          recursiveLog.push(row + ' ' + col);
+        }
+        let aroundCell = [
+          [rowCurr - 1, colCurr - 1],
+          [rowCurr - 1, colCurr],
+          [rowCurr - 1, colCurr + 1],
+          [rowCurr, colCurr - 1],
+          [rowCurr, colCurr + 1],
+          [rowCurr + 1, colCurr - 1],
+          [rowCurr + 1, colCurr],
+          [rowCurr + 1, colCurr + 1],
+        ];
+        aroundCell = aroundCell.filter(
+          (coord) =>
+            coord[0] > -1 &&
+            coord[0] < tableData.length &&
+            coord[1] > -1 &&
+            coord[1] < tableData[0].length
         );
-      }
-      if (tableData[row + 1]) {
-        aroundArea = aroundArea.concat(
-          tableData[row + 1][col - 1],
-          tableData[row + 1][col],
-          tableData[row + 1][col + 1]
+        const extractCode = aroundCell.map(
+          (coord) => tableData[coord[0]][coord[1]]
         );
-      }
-      const count = aroundArea.filter((code) =>
-        [
-          TABLE_CODE.MINE,
-          TABLE_CODE.FLAG_MINE,
-          TABLE_CODE.QUESTION_MINE,
-        ].includes(code)
-      ).length;
-      tableData[row][col] = count;
+        const count = extractCode.filter((code) => mineList.includes(code))
+          .length;
+        tableData[rowCurr][colCurr] = count;
+        if (count === 0) {
+          //call Recursive function (to open all cell doesn't carry mine)
+          aroundCell.forEach((coord) => checkMines(coord[0], coord[1]));
+        }
+      };
+      checkMines(row, col);
       return {
         ...state,
         tableData,
       };
+    }
     case ACTION_TYPE.BLOW_UP:
       return {
         ...state,
