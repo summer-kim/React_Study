@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { TableContext, START_GAME } from './MineSearch';
+import { TableContext } from './MineSearch';
+import { ACTION_TYPE } from './code';
 
 const Form = () => {
   const [rows, setRows] = useState(10);
@@ -20,7 +21,7 @@ const Form = () => {
   }, []);
 
   const onClick = useCallback(() => {
-    dispatch({ type: START_GAME, rows, cols, mines });
+    dispatch({ type: ACTION_TYPE.START_GAME, rows, cols, mines });
   }, [rows, cols, mines]);
 
   return (

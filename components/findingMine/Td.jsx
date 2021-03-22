@@ -1,13 +1,6 @@
 import React, { useContext, useCallback } from 'react';
-import {
-  TableContext,
-  TABLE_CODE,
-  OPEN_CELL,
-  TO_FLAG,
-  TO_NORMAL,
-  TO_QUESTION,
-  BLOW_UP,
-} from './MineSearch';
+import { TableContext } from './MineSearch';
+import { TABLE_CODE, ACTION_TYPE } from './code';
 import '../../asset/findingMine.css';
 
 const getTdText = (code) => {
@@ -47,10 +40,6 @@ const getTdStyle = (code) => {
 
 const Td = ({ rowIndex, colIndex }) => {
   const { tableData, dispatch, halted } = useContext(TableContext);
-  // const code = useMemo(() => {
-  //   return tableData[rowIndex][colIndex]}, [
-  //   tableData[rowIndex][colIndex],
-  // ]);
   console.log('td');
   const onClickDigging = useCallback(() => {
     if (halted) {
@@ -58,10 +47,10 @@ const Td = ({ rowIndex, colIndex }) => {
     }
     switch (tableData[rowIndex][colIndex]) {
       case TABLE_CODE.MINE:
-        dispatch({ type: BLOW_UP, row: rowIndex, col: colIndex });
+        dispatch({ type: ACTION_TYPE.BLOW_UP, row: rowIndex, col: colIndex });
         break;
       case TABLE_CODE.NORMAL:
-        dispatch({ type: OPEN_CELL, row: rowIndex, col: colIndex });
+        dispatch({ type: ACTION_TYPE.OPEN_CELL, row: rowIndex, col: colIndex });
         break;
       case TABLE_CODE.OPEND:
       default:
@@ -78,15 +67,23 @@ const Td = ({ rowIndex, colIndex }) => {
       switch (tableData[rowIndex][colIndex]) {
         case TABLE_CODE.MINE:
         case TABLE_CODE.NORMAL:
-          dispatch({ type: TO_QUESTION, row: rowIndex, col: colIndex });
+          dispatch({
+            type: ACTION_TYPE.TO_QUESTION,
+            row: rowIndex,
+            col: colIndex,
+          });
           break;
         case TABLE_CODE.QUESTION_MINE:
         case TABLE_CODE.QUESTION:
-          dispatch({ type: TO_FLAG, row: rowIndex, col: colIndex });
+          dispatch({ type: ACTION_TYPE.TO_FLAG, row: rowIndex, col: colIndex });
           break;
         case TABLE_CODE.FLAG_MINE:
         case TABLE_CODE.FLAG:
-          dispatch({ type: TO_NORMAL, row: rowIndex, col: colIndex });
+          dispatch({
+            type: ACTION_TYPE.TO_NORMAL,
+            row: rowIndex,
+            col: colIndex,
+          });
           break;
         case TABLE_CODE.OPEND:
         default:
