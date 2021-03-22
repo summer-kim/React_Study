@@ -15,6 +15,10 @@ td {
   height: 22px;
   border: 1px solid gray;
   border-radius: 20%;
+  cursor: pointer;
+}
+td:hover {
+  background-color: rgb(0, 160, 139);
 }
 
 tr {
