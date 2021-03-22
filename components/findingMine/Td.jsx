@@ -6,6 +6,7 @@ import {
   TO_FLAG,
   TO_NORMAL,
   TO_QUESTION,
+  BLOW_UP,
 } from './MineSearch';
 import '../../asset/findingMine.css';
 
@@ -42,15 +43,20 @@ const getTdStyle = (code) => {
 };
 
 const Td = ({ rowIndex, colIndex }) => {
-  const { tableData, dispatch } = useContext(TableContext);
+  const { tableData, dispatch, halted } = useContext(TableContext);
   // const code = useMemo(() => {
   //   return tableData[rowIndex][colIndex]}, [
   //   tableData[rowIndex][colIndex],
   // ]);
   console.log('td');
   const onClickDigging = useCallback(() => {
+    if (halted) {
+      return;
+    }
     switch (tableData[rowIndex][colIndex]) {
       case TABLE_CODE.MINE:
+        dispatch({ type: BLOW_UP, row: rowIndex, col: colIndex });
+        break;
       case TABLE_CODE.NORMAL:
         dispatch({ type: OPEN_CELL, row: rowIndex, col: colIndex });
         break;
@@ -58,11 +64,14 @@ const Td = ({ rowIndex, colIndex }) => {
       default:
         break;
     }
-  }, []);
+  }, [halted, tableData[rowIndex][colIndex]]);
 
   const onClickRight = useCallback(
     (e) => {
       e.preventDefault();
+      if (halted) {
+        return;
+      }
       switch (tableData[rowIndex][colIndex]) {
         case TABLE_CODE.MINE:
         case TABLE_CODE.NORMAL:
@@ -81,7 +90,7 @@ const Td = ({ rowIndex, colIndex }) => {
           break;
       }
     },
-    [tableData[rowIndex][colIndex]]
+    [halted, tableData[rowIndex][colIndex]]
   );
 
   return (

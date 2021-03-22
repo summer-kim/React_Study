@@ -5,6 +5,7 @@ import Table from './Table';
 export const TableContext = createContext({
   tableData: [],
   dispatch: () => {},
+  halted: false,
 });
 
 export const START_GAME = 'START_GAME';
@@ -12,6 +13,8 @@ export const OPEN_CELL = 'OPEN_CELL';
 export const TO_FLAG = 'TO_FLAG';
 export const TO_NORMAL = 'TO_NORMAL';
 export const TO_QUESTION = 'TO_QUESTION';
+export const BLOW_UP = 'BLOW_UP';
+
 export const TABLE_CODE = {
   MINE: -7,
   NORMAL: -1,
@@ -27,6 +30,7 @@ const initialState = {
   tableData: [],
   timePassed: 0,
   result: '',
+  halted: false,
 };
 
 const reducer = (state, action) => {
@@ -48,6 +52,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData,
+      };
+    case BLOW_UP:
+      return {
+        ...state,
+        halted: true,
       };
     case TO_QUESTION:
       rowArray = [...state.tableData[row]];
@@ -116,10 +125,11 @@ const plantMine = ({ rows, cols, mines }) => {
 
 const MineSearch = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const contextValue = useMemo(
-    () => ({ tableData: state.tableData, dispatch }),
-    [state.tableData]
-  );
+  const { tableData, halted } = state;
+  const contextValue = useMemo(() => ({ tableData, dispatch, halted }), [
+    tableData,
+    halted,
+  ]);
   return (
     <TableContext.Provider value={contextValue}>
       <Form />
