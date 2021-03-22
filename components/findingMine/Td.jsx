@@ -1,5 +1,4 @@
-import React, { useContext, useCallback } from 'react';
-import { TableContext } from './MineSearch';
+import React, { useContext, useCallback, memo } from 'react';
 import { TABLE_CODE, ACTION_TYPE } from './code';
 import '../../asset/findingMine.css';
 
@@ -16,7 +15,7 @@ const getTdText = (code) => {
     case TABLE_CODE.FLAG:
       return '!';
     default:
-      return code;
+      return code || ' ';
   }
 };
 
@@ -38,14 +37,12 @@ const getTdStyle = (code) => {
   }
 };
 
-const Td = ({ rowIndex, colIndex }) => {
-  const { tableData, dispatch, halted } = useContext(TableContext);
-  console.log('td');
+const Td = ({ rowIndex, colIndex, code, dispatch, halted }) => {
   const onClickDigging = useCallback(() => {
     if (halted) {
       return;
     }
-    switch (tableData[rowIndex][colIndex]) {
+    switch (code) {
       case TABLE_CODE.MINE:
         dispatch({ type: ACTION_TYPE.BLOW_UP, row: rowIndex, col: colIndex });
         break;
@@ -56,7 +53,7 @@ const Td = ({ rowIndex, colIndex }) => {
       default:
         break;
     }
-  }, [halted, tableData[rowIndex][colIndex]]);
+  }, [halted, code]);
 
   const onClickRight = useCallback(
     (e) => {
@@ -64,7 +61,7 @@ const Td = ({ rowIndex, colIndex }) => {
       if (halted) {
         return;
       }
-      switch (tableData[rowIndex][colIndex]) {
+      switch (code) {
         case TABLE_CODE.MINE:
         case TABLE_CODE.NORMAL:
           dispatch({
@@ -90,18 +87,18 @@ const Td = ({ rowIndex, colIndex }) => {
           break;
       }
     },
-    [halted, tableData[rowIndex][colIndex]]
+    [halted, code]
   );
 
   return (
     <td
       onClick={onClickDigging}
-      style={getTdStyle(tableData[rowIndex][colIndex])}
+      style={getTdStyle(code)}
       onContextMenu={onClickRight}
     >
-      {getTdText(tableData[rowIndex][colIndex])}
+      {getTdText(code)}
     </td>
   );
 };
 
-export default Td;
+export default memo(Td);

@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import Td from './Td';
 import { TableContext } from './MineSearch';
 
 const Tr = ({ rowIndex }) => {
-  const { tableData } = useContext(TableContext);
+  const { tableData, dispatch, halted } = useContext(TableContext);
+  console.log('rerender');
   return (
     <tr>
       {Array(tableData[0].length)
@@ -12,6 +13,9 @@ const Tr = ({ rowIndex }) => {
           <Td
             rowIndex={rowIndex}
             colIndex={index}
+            code={tableData[rowIndex][index]}
+            dispatch={dispatch}
+            halted={halted}
             key={rowIndex + '' + index}
           />
         ))}
@@ -19,4 +23,4 @@ const Tr = ({ rowIndex }) => {
   );
 };
 
-export default Tr;
+export default memo(Tr);

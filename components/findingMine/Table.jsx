@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import Tr from './Tr';
 import { TableContext } from './MineSearch';
 
@@ -17,4 +17,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default memo(Table);
