@@ -48,7 +48,29 @@ const reducer = (state, action) => {
       };
     case OPEN_CELL:
       const tableData = [...state.tableData];
-      tableData[row][col] = TABLE_CODE.OPEND;
+      let aroundArea = [tableData[row][col - 1], tableData[row][col + 1]];
+      if (tableData[row - 1]) {
+        aroundArea = aroundArea.concat(
+          tableData[row - 1][col - 1],
+          tableData[row - 1][col],
+          tableData[row - 1][col + 1]
+        );
+      }
+      if (tableData[row + 1]) {
+        aroundArea = aroundArea.concat(
+          tableData[row + 1][col - 1],
+          tableData[row + 1][col],
+          tableData[row + 1][col + 1]
+        );
+      }
+      const count = aroundArea.filter((code) =>
+        [
+          TABLE_CODE.MINE,
+          TABLE_CODE.FLAG_MINE,
+          TABLE_CODE.QUESTION_MINE,
+        ].includes(code)
+      ).length;
+      tableData[row][col] = count;
       return {
         ...state,
         tableData,

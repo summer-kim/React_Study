@@ -23,12 +23,15 @@ const getTdText = (code) => {
     case TABLE_CODE.FLAG:
       return '!';
     default:
-      break;
+      return code;
   }
 };
 
 const getTdStyle = (code) => {
   switch (code) {
+    case TABLE_CODE.NORMAL:
+    case TABLE_CODE.MINE:
+      return;
     case TABLE_CODE.OPEND:
       return { background: 'teal' };
     case TABLE_CODE.QUESTION_MINE:
@@ -38,7 +41,7 @@ const getTdStyle = (code) => {
     case TABLE_CODE.FLAG:
       return { background: 'rgb(255, 107, 156)' };
     default:
-      break;
+      return { background: 'teal' };
   }
 };
 
