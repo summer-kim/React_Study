@@ -22,12 +22,14 @@ const reducer = (state, action) => {
         TABLE_CODE.FLAG_MINE,
       ];
       const recursiveLog = [];
+      console.log('state:' + state.opendCount);
+      let opendCount = state.opendCount;
 
       const checkMines = (rowCurr, colCurr) => {
         if (mineList.includes(tableData[rowCurr][colCurr])) {
           return;
         }
-        if (tableData[rowCurr][colCurr] === TABLE_CODE.OPEND) {
+        if (tableData[rowCurr][colCurr] >= TABLE_CODE.OPEND) {
           return;
         }
         if (recursiveLog.includes(rowCurr + ' ' + colCurr)) {
@@ -62,11 +64,15 @@ const reducer = (state, action) => {
           //call Recursive function (to open all cell doesn't carry mine)
           aroundCell.forEach((coord) => checkMines(coord[0], coord[1]));
         }
+        opendCount++;
       };
       checkMines(row, col);
+      console.log('after :' + opendCount);
+      console.log(opendCount);
       return {
         ...state,
         tableData,
+        opendCount,
       };
     }
     case ACTION_TYPE.BLOW_UP:
