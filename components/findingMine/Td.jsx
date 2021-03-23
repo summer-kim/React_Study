@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, memo } from 'react';
+import React, { useCallback, memo } from 'react';
+import {
+  faQuestion,
+  faExclamation,
+  faBomb,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TABLE_CODE, ACTION_TYPE } from './code';
 import '../../asset/findingMine.css';
 
@@ -7,14 +13,15 @@ const getTdText = (code) => {
     case TABLE_CODE.MINE:
       return 'X';
     case TABLE_CODE.EXPLOSION:
+      return <FontAwesomeIcon icon={faBomb} />;
     case TABLE_CODE.NORMAL:
       return ' ';
     case TABLE_CODE.QUESTION_MINE:
     case TABLE_CODE.QUESTION:
-      return '?';
+      return <FontAwesomeIcon icon={faQuestion} />;
     case TABLE_CODE.FLAG_MINE:
     case TABLE_CODE.FLAG:
-      return '!';
+      return <FontAwesomeIcon icon={faExclamation} />;
     default:
       return code || ' ';
   }
