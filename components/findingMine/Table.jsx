@@ -3,17 +3,15 @@ import Tr from './Tr';
 import { TableContext } from './MineSearch';
 
 const Table = () => {
-  const { tableData, halted } = useContext(TableContext);
+  const { tableData } = useContext(TableContext);
   return (
-    <table>
+    <table className='m-1 ms-2'>
       <tbody id='tableTbody'>
-        {halted ? (
-          <button className='btn'>Reset</button>
-        ) : (
-          Array(tableData.length)
-            .fill()
-            .map((tr, index) => <Tr rowIndex={index} key={index} />)
-        )}
+        {Array(tableData.length)
+          .fill()
+          .map((tr, index) => (
+            <Tr rowIndex={index} key={index} />
+          ))}
       </tbody>
     </table>
   );

@@ -11,7 +11,7 @@ import '../../asset/findingMine.css';
 const getTdText = (code) => {
   switch (code) {
     case TABLE_CODE.MINE:
-      return 'X';
+      return ' ';
     case TABLE_CODE.EXPLOSION:
       return <FontAwesomeIcon icon={faBomb} />;
     case TABLE_CODE.NORMAL:

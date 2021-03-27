@@ -8,15 +8,15 @@ export const TableContext = createContext({
   tableData: [],
   dispatch: () => {},
   halted: false,
-  opendCount: 0,
+  result: 'Win',
+  opendNum: 0,
 });
 
 const initialState = {
+  opendNum: 0,
   tableData: [],
-  timePassed: 0,
-  result: '',
+  result: 'Win',
   halted: false,
-  opendCount: 0,
 };
 
 export const plantMine = ({ rows, cols, mines }) => {
@@ -48,17 +48,17 @@ export const plantMine = ({ rows, cols, mines }) => {
 
 const MineSearch = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { tableData, halted, opendCount } = state;
+  const { tableData, halted, result, opendNum } = state;
   const contextValue = useMemo(
-    () => ({ tableData, dispatch, halted, opendCount }),
-    [tableData, halted, opendCount]
+    () => ({ tableData, dispatch, halted, result, opendNum }),
+    [tableData, halted, opendNum]
   );
   return (
     <TableContext.Provider value={contextValue}>
-      <Form />
-      <div>{state.timePassed}</div>
-      <Table />
-      <div>{state.result}</div>
+      <div className='d-flex flex-row justify-content-center align-items-center'>
+        <Form />
+        <Table />
+      </div>
     </TableContext.Provider>
   );
 };
