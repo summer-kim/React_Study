@@ -11,8 +11,8 @@ table {
 }
 td {
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border: 1px solid gray;
   border-radius: 20%;
   cursor: pointer;
@@ -28,8 +28,6 @@ tr {
   color: white;
 }
 #tableTbody {
-  min-width: 282px;
-  min-height: 282px;
   padding: 20px;
   background-color: rgb(255, 107, 156);
   border-radius: 2.5%;

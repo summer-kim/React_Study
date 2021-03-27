@@ -82,7 +82,7 @@ const Form = () => {
       />
       <br />
       <button className='btn border rounded'>Submit</button>
-      <div className=' border rounded'>{result}</div>
+      <div className='mt-2'>{result}</div>
     </form>
   );
 };
