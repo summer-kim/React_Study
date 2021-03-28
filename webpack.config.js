@@ -5,6 +5,9 @@ module.exports = {
   name: 'mini_game',
   mode: 'development',
   devtool: 'eval',
+  performance: {
+    hints: false,
+  },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
