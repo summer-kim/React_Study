@@ -29,14 +29,21 @@
 <p align="center"><em>🧡 Webpack, Babel, CRA</em></p>
 
 ```
-    ReeR 포트폴리오는 CRA를 사용하여 편한 환경에서 코딩을 했는데 이번엔 Webpack과 Babel로 하나하나 셋팅을 하는 법을
-    배우면서 프론트엔드 개발환경에 대해 좀더 심도있게 이해하게 되었습니다.
+    그동안 CRA를 사용할 때는 몰랐던 프론트엔드 개발환경에 대해 좀더 심도있게 이해하게 되었습니다.
+    여러개로 쪼개져 있는 자바스크립트 파일을 받기 위해 서버와 여러번 통신하게 되는게 비효율적이여서
+    하나로 합쳐주는 Webpack같은 모듈 번들러가 필요하다는 것을 이해했습니다.
+    또한 Babel loader나 CSS,file loader와 Plugin,entry,output을
+    webpack.config.js에 설정할 수 있습니다.
 ```
 
 <p align="center"><em>💛 Rendering Optimization</em></p>
 
 ```
-    setInterval setTimeout같은 함수들도 unmount되기 전, clear함수들로 제거를 해줘야 함
+    prop이 변경되거나 부모가 Rerendering될 때 자식까지 전부다 rerendering되어
+    불필요한 Rendering이 일어나 렌더링 최적화를 해야할 필요성을 알게되었습니다.
+    Class Component에서는 shouldcomponentupdate, Function Component에는 useMemo, memo, useCallback
+    등을 사용하여 렌더링 최적화를 할 수 있습니다.
+    뿐만 아니라, setInterval setTimeout같은 함수들도 Unmount되기 전, clear함수들로 제거할 수 있습니다.
 ```
 
 <p align="center"><em>💚 useReducer, Context API</em></p>
